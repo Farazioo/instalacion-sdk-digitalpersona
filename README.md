@@ -1,5 +1,56 @@
 # Installing DigitalPersona SDK on Ubuntu 18.04
 
+1 Step Solution
+Read Furthure for more details
+```bash
+#!/bin/bash
+
+# Navigate to the SDK directory and install the SDK
+cd sdk/sdk
+sudo ./install
+
+# Go back to the 'instalacion-sdk' directory and copy the 'Crossmatch' folder to '/usr/local/lib'
+cd ../../instalacion-sdk
+sudo cp -r Crossmatch /usr/local/lib
+
+# If copying fails, change permissions and try again
+if [ $? -ne 0 ]; then
+    cd /usr/local
+    sudo chmod -R 777 lib
+    cd - # Go back to the previous directory
+    sudo cp -r Crossmatch /usr/local/lib
+fi
+
+# Copy text files 99-*cc from '/opt/Crossmatch/urusdk-linux/redist' to '/etc/udev/rules.d'
+cd /opt/Crossmatch/urusdk-linux/redist
+sudo cp 99-*cc /etc/udev/rules.d/
+
+# If copying fails, change permissions and try again
+if [ $? -ne 0 ]; then
+    cd /etc/udev
+    sudo chmod -R 777 rules.d
+    cd - # Go back to the previous directory
+    sudo cp 99-*cc /etc/udev/rules.d/
+fi
+
+# Install default Java JDK
+sudo apt-get update
+sudo apt-get install -y default-jdk
+
+# Uncomment the following lines if using Ubuntu 22 and Java 17 is needed
+# sudo apt-get install -y openjdk-17-jdk
+
+# Navigate to the Java samples directory and run the example script
+cd /opt/Crossmatch/urusdk-linux/linux/samples/bin/java
+sudo ./run_x64.sh
+
+# Navigate to the 'finger' directory, compile and run the server
+cd /path/to/finger
+make
+./finger
+```
+
+
 1. **Navigate to the SDK Directory and Install the SDK**:
    - Open a terminal and navigate to the `sdk/sdk` directory:
      ```bash
